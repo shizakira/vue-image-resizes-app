@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {ref} from "vue"
+import { ref } from 'vue'
+import ResizeableImage from '@/components/ResizeableImage.vue'
 
 const selectedFile = ref<HTMLInputElement | null>(null)
-const imageSrc = ref<string | null>(null)
-const image = ref<HTMLImageElement | null>(null)
-const handleImage = () => {
+const imageSrc = ref<string>('')
+const handleResizeableImage = () => {
   const fileInput = selectedFile.value
 
   if (!fileInput || !fileInput?.files) {
@@ -21,26 +21,35 @@ const handleImage = () => {
   reader.readAsDataURL(file)
 }
 
-const deleteImage = () => {
-  imageSrc.value = null
-}
-
-const checkSizes = () => {
-  alert(image.value.width, image.value.height);
+const deleteResizeableImage = () => {
+  if (selectedFile.value) {
+    selectedFile.value.value = ''
+  }
+  imageSrc.value = ''
 }
 </script>
 
 <template>
   <div class="app">
-    <input type="file" ref="selectedFile" class="image-input" multiple @change="handleImage">
-    <button class="delete-img-btn" @click="deleteImage">Удалить фото</button>
-    <button class="check-img-btn" @click="checkSizes">Посмотркть размеры</button>
-    <div class="image-container">
-      <img ref="image" v-show="imageSrc" class="image" :src="imageSrc" alt="">
+    <div class="container">
+      <input
+        type="file"
+        ref="selectedFile"
+        class="image-input"
+        multiple
+        @change="handleResizeableImage"
+      />
+      <button v-if="imageSrc" class="delete-img-btn" @click="deleteResizeableImage">
+        Удалить фото
+      </button>
+      <resizeable-image v-if="imageSrc" :image-src="imageSrc"></resizeable-image>
     </div>
   </div>
 </template>
 
 <style scoped>
-
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
 </style>
