@@ -23,10 +23,21 @@ const handleSetDiagonalInput = (): void => {
 </script>
 
 <template>
-  <label for="setDiagonalInput">Установить диагональ экрана</label>
-  <input v-model="diagonalInput" type="text" class="input-diagonal" id="setDiagonalInput" />
-  <span v-if="isError">Значение должно быть числом. Например, 27, 21.5</span>
-  <button class="set-diagonal-input" @click="handleSetDiagonalInput">Применить</button>
+  <div class="set-diagonal-wrapper">
+    <div class="set-diagonal-box">
+      <label for="setDiagonalInput">Установить диагональ экрана</label>
+      <input v-model="diagonalInput" type="text" class="input-diagonal" id="setDiagonalInput" />
+      <span v-if="isError">Значение должно быть числом. Например, 27, 21.5</span>
+      <button class="set-diagonal-input" @click="handleSetDiagonalInput">Применить</button>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+  .set-diagonal-wrapper{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>

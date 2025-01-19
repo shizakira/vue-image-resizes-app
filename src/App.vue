@@ -41,37 +41,50 @@ const deleteResizeableImage = () => {
 <template>
   <div class="main">
     <div class="container">
-      <screen-diagonal-setter v-if="!isScreenDiagonalSet"></screen-diagonal-setter>
-      <div v-if="isScreenDiagonalSet" class="manage">
-        <div class="manage__reset-diagonal">
-          <button class="manage__reset-diagonal_btn" @click="resetDiagonal">
-            Изменить диагональ
-          </button>
+      <div class="main-inner">
+        <screen-diagonal-setter v-if="!isScreenDiagonalSet"></screen-diagonal-setter>
+        <div v-if="isScreenDiagonalSet" class="manage">
+          <div class="manage__reset-diagonal">
+            <button class="manage__reset-diagonal_btn" @click="resetDiagonal">
+              Изменить диагональ
+            </button>
+          </div>
+          <div class="manage__image-input">
+            <input
+              type="file"
+              ref="selectedFile"
+              class="image-input"
+              multiple
+              @change="handleResizeableImage"
+            />
+            <button v-if="imageSrc" class="delete-img-btn" @click="deleteResizeableImage">
+              Удалить фото
+            </button>
+          </div>
         </div>
-        <div class="manage__image-input">
-          <input
-            type="file"
-            ref="selectedFile"
-            class="image-input"
-            multiple
-            @change="handleResizeableImage"
-          />
-          <button v-if="imageSrc" class="delete-img-btn" @click="deleteResizeableImage">
-            Удалить фото
-          </button>
-        </div>
+        <draggable-resizeable-image
+          v-if="imageSrc && isScreenDiagonalSet"
+          :image-src="imageSrc"
+        ></draggable-resizeable-image>
       </div>
-      <draggable-resizeable-image
-        v-if="imageSrc && isScreenDiagonalSet"
-        :image-src="imageSrc"
-      ></draggable-resizeable-image>
     </div>
   </div>
 </template>
 
-<style scoped>
-.container {
-  width: 80%;
-  margin: 0 auto;
+<style scoped lang="scss">
+.main{
+  background-color: #409EFF;
+  height: 100vh;
+  padding: 20px 0;
+
+  .container, .main-inner{
+    height: 100%;
+  }
+}
+
+.main-inner{
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 20px;
 }
 </style>
