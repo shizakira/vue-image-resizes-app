@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import type { Sizes } from '@/interfaces/Sizes.ts'
+import { useScreenConfigStore } from '@/stores/screen-config-store.ts'
 
 const props = defineProps<{ imageSrc: string }>()
 const imageElem = ref<HTMLImageElement | null>(null)
 
-const DPI = 108
+const { getDpi } = useScreenConfigStore()
+const dpi = getDpi()
 const inchCm = 2.54
-
-const totalScreenWidth = window.screen.width
-const totalScreenHeight = window.screen.height
-
-console.log(totalScreenWidth, totalScreenHeight)
 
 const sizes = reactive<Sizes>({
   width: 0,
@@ -22,8 +19,8 @@ const assignSizes = () => {
   const widthPx = imageElem.value?.width
   const heightPx = imageElem.value?.height
 
-  sizes.width = +(((widthPx as number) / DPI) * inchCm).toFixed(2)
-  sizes.height = +(((heightPx as number) / DPI) * inchCm).toFixed(2)
+  sizes.width = +(((widthPx as number) / dpi) * inchCm).toFixed(1)
+  sizes.height = +(((heightPx as number) / dpi) * inchCm).toFixed(1)
 }
 
 const handleImageOnLoad = () => {
@@ -44,7 +41,7 @@ const handleImageOnLoad = () => {
           <img
             ref="imageElem"
             @load="handleImageOnLoad"
-            class="image-object"
+            class="target-image"
             :src="props.imageSrc"
             alt="img"
           />
@@ -65,8 +62,7 @@ const handleImageOnLoad = () => {
   height: 100%;
 }
 
-
-.image-object{
+.target-image{
   width: 100%;
   height: 100%;
   object-fit: fill;
