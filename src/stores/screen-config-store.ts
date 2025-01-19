@@ -9,17 +9,23 @@ export const useScreenConfigStore = defineStore('screenConfig', () => {
     screenDiagonal.value = fetchedScreenDiagonal
     localStorage.setItem('screenDiagonal', `${fetchedScreenDiagonal}`)
   }
+
+  const resetDiagonal = () => {
+    screenDiagonal.value = null
+    localStorage.removeItem('screenDiagonal')
+  }
   const getDpi = (): number => {
-    if(!screenDiagonal.value){
+    if (!screenDiagonal.value) {
       throw new Error('screenDiagonal is not set')
     }
 
     const totalScreenWidth: number = window.screen.width
     const totalScreenHeight: number = window.screen.height
     const pixelDiagonal = Math.sqrt(totalScreenWidth ** 2 + totalScreenHeight ** 2)
+    const diagonalInInches = parseFloat(screenDiagonal.value)
 
-    return pixelDiagonal / +screenDiagonal.value
+    return pixelDiagonal / diagonalInInches
   }
 
-  return { screenDiagonal, isScreenDiagonalSet, setDiagonal, getDpi }
+  return { screenDiagonal, isScreenDiagonalSet, setDiagonal, resetDiagonal, getDpi }
 })
