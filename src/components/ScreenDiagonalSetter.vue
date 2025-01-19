@@ -6,7 +6,7 @@ const { setDiagonal } = useScreenConfigStore()
 const diagonalInput = ref<string>('')
 
 const validateInputOnNumber = (): boolean => {
-  const regexp = /\d+/
+  const regexp = /^\d+(\.\d+)?$/
   return regexp.test(diagonalInput.value)
 }
 
@@ -25,7 +25,7 @@ const handleSetDiagonalInput = (): void => {
 <template>
   <label for="setDiagonalInput">Установить диагональ экрана</label>
   <input v-model="diagonalInput" type="text" class="input-diagonal" id="setDiagonalInput" />
-  <span v-if="isError">Значение должно быть числом</span>
+  <span v-if="isError">Значение должно быть числом. Например, 27, 21.5</span>
   <button class="set-diagonal-input" @click="handleSetDiagonalInput">Применить</button>
 </template>
 
