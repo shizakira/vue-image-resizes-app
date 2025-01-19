@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useScreenConfigStore } from '@/stores/screen-config-store.ts'
+import { useScreenConfigStore } from '@/stores/useScreenConfig.ts'
 
 const { setDiagonal } = useScreenConfigStore()
 const diagonalInput = ref<string>('')

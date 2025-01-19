@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useScreenConfigStore } from '@/stores/screen-config-store.ts'
+import { useScreenConfigStore } from '@/stores/useScreenConfig.ts'
 import { storeToRefs } from 'pinia'
-import ResizeableImage from '@/components/ResizeableImage.vue'
-import SetDiagonalInput from '@/components/SetDiagonalInput.vue'
+import DraggableResizeableImage from '@/components/DraggableResizeableImage.vue'
+import ScreenDiagonalSetter from '@/components/ScreenDiagonalSetter.vue'
 
 const store = useScreenConfigStore()
 const { resetDiagonal } = store
@@ -41,7 +41,7 @@ const deleteResizeableImage = () => {
 <template>
   <div class="main">
     <div class="container">
-      <set-diagonal-input v-if="!isScreenDiagonalSet"></set-diagonal-input>
+      <screen-diagonal-setter v-if="!isScreenDiagonalSet"></screen-diagonal-setter>
       <div v-if="isScreenDiagonalSet" class="manage">
         <div class="manage__reset-diagonal">
           <button class="manage__reset-diagonal_btn" @click="resetDiagonal">
@@ -61,10 +61,10 @@ const deleteResizeableImage = () => {
           </button>
         </div>
       </div>
-      <resizeable-image
+      <draggable-resizeable-image
         v-if="imageSrc && isScreenDiagonalSet"
         :image-src="imageSrc"
-      ></resizeable-image>
+      ></draggable-resizeable-image>
     </div>
   </div>
 </template>

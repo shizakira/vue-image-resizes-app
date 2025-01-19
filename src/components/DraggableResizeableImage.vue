@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import type { Sizes } from '@/interfaces/Sizes.ts'
-import { useScreenConfigStore } from '@/stores/screen-config-store.ts'
+import { useScreenConfigStore } from '@/stores/useScreenConfig.ts'
 
 const props = defineProps<{ imageSrc: string }>()
 const imageElem = ref<HTMLImageElement | null>(null)
@@ -65,7 +65,7 @@ const handleImageOnLoad = () => {
 .target-image{
   width: 100%;
   height: 100%;
-  object-fit: fill;
+  object-fit: contain;
 }
 
 </style>
