@@ -85,7 +85,7 @@ const deleteResizeableImage = () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/mixins.scss";
+@use "@/assets/mixins.scss";
 .main {
   background-color: rgb(102.2, 177.4, 255);
   height: 100vh;
@@ -98,7 +98,7 @@ const deleteResizeableImage = () => {
 }
 
 .main-inner {
-  @include box-shadow-template;
+  @include mixins.box-shadow-template;
   background-color: #fff;
   border-radius: 15px;
   padding: 20px;
