@@ -99,12 +99,14 @@ watch(() => cmSizes, assignPixelSizes, { deep: true })
 </template>
 
 <style scoped lang="scss">
+@import "@/assets/mixins.scss";
 .image-sizes {
   display: flex;
   flex-direction: column;
 }
 
 .image-wrapper {
+  @include box-shadow-template;
   width: 100%;
   height: 100%;
 }
@@ -116,6 +118,7 @@ watch(() => cmSizes, assignPixelSizes, { deep: true })
 }
 
 .length-block {
+  @include box-shadow-template;
   display: flex;
   flex-direction: column;
   gap: 10px;
