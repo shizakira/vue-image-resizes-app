@@ -4,6 +4,7 @@ import { useScreenConfigStore } from '@/stores/useScreenConfig.ts'
 import { storeToRefs } from 'pinia'
 import DraggableResizeableImage from '@/components/DraggableResizeableImage.vue'
 import ScreenDiagonalSetter from '@/components/ScreenDiagonalSetter.vue'
+import TopPanel from '@/layouts/TopPanel.vue'
 
 const store = useScreenConfigStore()
 const { resetDiagonal } = store
@@ -11,7 +12,11 @@ const { isScreenDiagonalSet } = storeToRefs(store)
 
 const selectedFile = ref<HTMLInputElement | null>(null)
 const imageSrc = ref<string>('')
+const proxyUploadBtn = ref<HTMLButtonElement | null>(null)
 
+const handleProxyToInput = () => {
+  selectedFile.value?.click()
+}
 const handleResizeableImage = () => {
   const fileInput = selectedFile.value
 
@@ -42,26 +47,34 @@ const deleteResizeableImage = () => {
   <div class="main">
     <div class="container">
       <div class="main-inner">
-        <screen-diagonal-setter v-if="!isScreenDiagonalSet"></screen-diagonal-setter>
-        <div v-if="isScreenDiagonalSet" class="manage">
-          <div class="manage__reset-diagonal">
-            <button class="manage__reset-diagonal_btn" @click="resetDiagonal">
-              Изменить диагональ
-            </button>
+        <top-panel>
+          <screen-diagonal-setter v-if="!isScreenDiagonalSet"></screen-diagonal-setter>
+          <div v-if="isScreenDiagonalSet" class="manage">
+            <div class="manage__reset-diagonal">
+              <el-button @click="resetDiagonal" type="primary">Изменить диагональ</el-button>
+            </div>
+            <div class="manage__image-input">
+              <el-button
+                type="primary"
+                class="proxy-upload-btn"
+                ref="proxyUploadBtn"
+                @click="handleProxyToInput"
+              >
+                Upload
+                <input
+                  type="file"
+                  ref="selectedFile"
+                  class="image-input"
+                  multiple
+                  @change="handleResizeableImage"
+                />
+              </el-button>
+              <el-button v-if="imageSrc" @click="deleteResizeableImage" type="primary">
+                Удалить фото
+              </el-button>
+            </div>
           </div>
-          <div class="manage__image-input">
-            <input
-              type="file"
-              ref="selectedFile"
-              class="image-input"
-              multiple
-              @change="handleResizeableImage"
-            />
-            <button v-if="imageSrc" class="delete-img-btn" @click="deleteResizeableImage">
-              Удалить фото
-            </button>
-          </div>
-        </div>
+        </top-panel>
         <draggable-resizeable-image
           v-if="imageSrc && isScreenDiagonalSet"
           :image-src="imageSrc"
@@ -72,19 +85,34 @@ const deleteResizeableImage = () => {
 </template>
 
 <style scoped lang="scss">
-.main{
-  background-color: #409EFF;
+.main {
+  background-color: rgb(102.2, 177.4, 255);
   height: 100vh;
   padding: 20px 0;
 
-  .container, .main-inner{
+  .container,
+  .main-inner {
     height: 100%;
   }
 }
 
-.main-inner{
+.main-inner {
   background-color: #fff;
   border-radius: 15px;
   padding: 20px;
+}
+
+.manage {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.manage__reset-diagonal {
+  flex: 1;
+}
+
+.image-input {
+  display: none;
 }
 </style>
