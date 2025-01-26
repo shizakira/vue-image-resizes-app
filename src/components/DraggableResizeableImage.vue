@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue'
+import { nextTick, reactive, ref, watch } from 'vue'
 import type { Sizes } from '@/interfaces/Sizes.ts'
 import { useScreenConfigStore } from '@/stores/useScreenConfig.ts'
 
@@ -20,6 +20,11 @@ const cmSizes = reactive<Sizes>({
   height: 0,
 })
 
+const resizeableImageComponentPositions = reactive({
+  x: 0,
+  y: 0,
+})
+
 const assignCmSizes = () => {
   pixelSizes.width = imageElem.value?.width as number
   pixelSizes.height = imageElem.value?.height as number
@@ -32,9 +37,25 @@ const assignPixelSizes = () => {
   pixelSizes.width = Math.round((cmSizes.width / inchCm) * dpi)
   pixelSizes.height = Math.round((cmSizes.height / inchCm) * dpi)
 }
+
+const centerResizeableImageComponentPositions = () => {
+  const windowWidth = window.innerWidth
+  const windowHeight = window.innerHeight
+
+  const quarterFromDefault = 250
+
+  resizeableImageComponentPositions.x =
+    Math.round((windowWidth - pixelSizes.width) / 2) - quarterFromDefault
+
+  resizeableImageComponentPositions.y =
+    Math.round((windowHeight - pixelSizes.height) / 2) - quarterFromDefault
+}
 const handleImageOnLoad = () => {
   if (imageElem.value) {
     assignCmSizes()
+    nextTick(() => {
+      centerResizeableImageComponentPositions()
+    })
   }
 }
 
@@ -45,24 +66,21 @@ watch(() => cmSizes, assignPixelSizes, { deep: true })
   <div class="image-container">
     <div class="image-sizes">
       <div class="length-block">
-
         <div class="length-elem">
           <span class="length-word"> Ширина </span>
           <el-input v-model="cmSizes.width" style="width: 80px" :placeholder="cmSizes.width" />
           <span>см</span>
         </div>
-
         <div class="length-elem">
           <span class="length-word">Высота</span>
           <el-input v-model="cmSizes.height" style="width: 80px" :placeholder="cmSizes.height" />
           <span>см </span>
         </div>
-
       </div>
     </div>
     <vue-draggable-resizable
-      :x="400"
-      :y="70"
+      :x="resizeableImageComponentPositions.x"
+      :y="resizeableImageComponentPositions.y"
       :w="pixelSizes.width"
       :h="pixelSizes.height"
       @resize="assignCmSizes"
@@ -97,7 +115,7 @@ watch(() => cmSizes, assignPixelSizes, { deep: true })
   object-fit: contain;
 }
 
-.length-block{
+.length-block {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -110,16 +128,15 @@ watch(() => cmSizes, assignPixelSizes, { deep: true })
   border: 1px solid rgb(166.2, 168.6, 173.4);
   border-radius: 15px;
 
-  .length-elem{
+  .length-elem {
     display: flex;
     gap: 10px;
     align-items: self-start;
     width: 200px;
+
     .length-word {
       flex: 1;
     }
   }
 }
-
-
 </style>
