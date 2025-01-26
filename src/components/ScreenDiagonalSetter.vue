@@ -13,7 +13,7 @@ const validateInputOnNumber = (): boolean => {
 const isError = ref<boolean>(false)
 
 const handleSetDiagonalInput = (): void => {
-  if (!validateInputOnNumber()){
+  if (!validateInputOnNumber()) {
     isError.value = true
     return
   }
@@ -23,21 +23,32 @@ const handleSetDiagonalInput = (): void => {
 </script>
 
 <template>
-  <div class="set-diagonal-wrapper">
+  <div class="top-panel">
     <div class="set-diagonal-box">
-      <label for="setDiagonalInput">Установить диагональ экрана</label>
-      <input v-model="diagonalInput" type="text" class="input-diagonal" id="setDiagonalInput" />
+      <el-input
+        v-model="diagonalInput"
+        style="width: 240px"
+        placeholder="Установите диагональ экрана"
+        @keyup.enter="handleSetDiagonalInput"
+      />
+      <el-button
+        type="primary"
+        @click="handleSetDiagonalInput"
+        >Применить
+      </el-button>
       <span v-if="isError">Значение должно быть числом. Например, 27, 21.5</span>
-      <button class="set-diagonal-input" @click="handleSetDiagonalInput">Применить</button>
     </div>
   </div>
 </template>
 
-<style scoped>
-  .set-diagonal-wrapper{
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+<style scoped lang="scss">
+.set-diagonal-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  span {
+    color: #fff;
   }
+}
 </style>
